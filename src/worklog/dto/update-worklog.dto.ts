@@ -20,4 +20,7 @@ export class UpdateWorkLogDto {
   @ValidateNested({ each: true })
   @Type(() => CreateWorkLogAttachmentDto)
   attachments?: CreateWorkLogAttachmentDto[];
+
+    @IsOptional()
+  descriptions?: string[]
 }

@@ -32,4 +32,7 @@ export class CreateWorkLogDto {
   @ValidateNested({ each: true })
   @Type(() => CreateWorkLogAttachmentDto)
   attachments?: CreateWorkLogAttachmentDto[];
+
+    @IsOptional()
+  descriptions?: string[]
 }
