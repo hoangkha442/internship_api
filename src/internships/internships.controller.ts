@@ -164,7 +164,7 @@ export class InternshipsController {
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   getAllInternships(@Query('page') page?: any, @Query('limit') limit?: any) {
-    return this.service.getAllInternships(page, limit);
+    return this.service.getAllInternships(page, limit)
   }
 
   @Get('terms')

@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsDateString, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsArray,
+  IsDateString,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateWorkLogAttachmentDto {
@@ -33,6 +39,6 @@ export class CreateWorkLogDto {
   @Type(() => CreateWorkLogAttachmentDto)
   attachments?: CreateWorkLogAttachmentDto[];
 
-    @IsOptional()
-  descriptions?: string[]
+  @IsOptional()
+  descriptions?: string[];
 }

@@ -1,25 +1,37 @@
-import { IsOptional, IsString, IsEmail, IsEnum, IsBoolean } from 'class-validator';
 import { users_role } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsEmail, IsOptional, IsString, MaxLength, IsNumberString } from 'class-validator';
 
 export class UpdateUserDto {
-  @ApiProperty({example: 'Nguyen Van A', description: 'Họ và tên đầy đủ', required: false })
   @IsOptional()
   @IsString()
+  @MaxLength(255)
   full_name?: string;
 
-  @ApiProperty({example: 'example@example.com', description: 'Địa chỉ email', required: false })
   @IsOptional()
   @IsEmail()
+  @MaxLength(255)
   email?: string;
 
-  @ApiProperty({example: 'student', description: 'Vai trò của user', required: false, enum: users_role })
-  @IsOptional()
-  @IsEnum(users_role)
-  role?: users_role;
-
-  @ApiProperty({example: true, description: 'Trạng thái hoạt động', required: false })
   @IsOptional()
   @IsBoolean()
   is_active?: boolean;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  role?: users_role;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  department?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  class_id?: string;
 }

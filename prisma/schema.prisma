@@ -20,6 +20,15 @@ model attendance_records {
   rejection_reason        String?                    @db.Text
   note                    String?                    @db.VarChar(500)
   created_at              DateTime?                  @default(now()) @db.Timestamp(0)
+  checkin_lat             Decimal?                   @db.Decimal(10, 7)
+  checkin_lng             Decimal?                   @db.Decimal(10, 7)
+  checkin_accuracy_m      Int?
+  checkout_lat            Decimal?                   @db.Decimal(10, 7)
+  checkout_lng            Decimal?                   @db.Decimal(10, 7)
+  checkout_accuracy_m     Int?
+  client_ip               String?                    @db.VarChar(64)
+  user_agent              String?                    @db.VarChar(255)
+  verified_method         String?                    @db.VarChar(20)
   lecturers               lecturers?                 @relation(fields: [approved_by_lecturer_id], references: [id], map: "fk_attendance_approved_lecturer")
   internships             internships                @relation(fields: [internship_id], references: [id], onDelete: Cascade, map: "fk_attendance_internship")
 
@@ -210,6 +219,7 @@ model users {
   password_hash String          @db.VarChar(255)
   role          users_role
   is_active     Boolean         @default(true)
+  avatar_url    String?         @db.VarChar(500)
   created_at    DateTime?       @default(now()) @db.Timestamp(0)
   updated_at    DateTime?       @default(now()) @db.Timestamp(0)
   audit_logs    audit_logs[]
@@ -287,6 +297,14 @@ model topic_registrations {
 
   @@unique([student_id, topic_id], map: "uq_student_topic")
   @@index([topic_id], map: "fk_topic_reg_topic")
+}
+
+model allowed_networks {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String    @db.VarChar(255)
+  cidr       String    @db.VarChar(64)
+  is_active  Boolean   @default(true)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
 }
 
 enum users_role {

@@ -1,14 +1,25 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, MaxLength, IsNumberString } from 'class-validator';
 
 export class UpdateMeDto {
-  @ApiProperty({example: 'Nguyen Van A', description: 'Họ và tên người dùng' })
   @IsOptional()
   @IsString()
+  @MaxLength(255)
   full_name?: string;
 
-  @ApiProperty({example: '0123456789', description: 'Số điện thoại người dùng' })
+  // student/lecturer dùng chung
   @IsOptional()
   @IsString()
+  @MaxLength(20)
   phone?: string;
+
+  // lecturer
+  @IsOptional()
+  @IsString()
+  @MaxLength(255)
+  department?: string;
+
+  // student
+  @IsOptional()
+  @IsNumberString()
+  class_id?: string;
 }

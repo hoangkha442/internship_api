@@ -196,7 +196,6 @@ export class WorklogService {
         where: { id: updated.id },
         include: { work_log_attachments: true },
       });
-
       return { message: 'Cập nhật worklog thành công', worklog: full };
     });
   }

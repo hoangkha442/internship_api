@@ -594,7 +594,6 @@ export class InternshipsService {
   }
 
   async getTopicsByTerm(termId: string, page: number, limit: number) {
-    // validate term
     const term = await this.prisma.internship_terms.findUnique({
       where: { id: BigInt(termId) },
       select: { id: true },

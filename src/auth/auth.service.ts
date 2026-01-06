@@ -15,57 +15,57 @@ export class AuthService {
   prisma = new PrismaClient();
 
   // ***************************** TẠO TÀI KHOẢN *****************************
-  async signup(dto: CreateAuthDto) {
-    const exists = await this.prisma.users.findUnique({
-      where: { email: dto.email },
-    });
-    if (exists) throw new BadRequestException('Email đã tồn tại');
+//   async signup(dto: CreateAuthDto) {
+//     const exists = await this.prisma.users.findUnique({
+//       where: { email: dto.email },
+//     });
+//     if (exists) throw new BadRequestException('Email đã tồn tại');
 
-    const password_hash = await bcrypt.hash(dto.password, 10);
+//     const password_hash = await bcrypt.hash(dto.password, 10);
 
-    const user = await this.prisma.users.create({
-      data: {
-        full_name: dto.full_name,
-        email: dto.email,
-        password_hash,
-        role: dto.role,
-      }
-    })
+//     const user = await this.prisma.users.create({
+//       data: {
+//         full_name: dto.full_name,
+//         email: dto.email,
+//         password_hash,
+//         role: dto.role,
+//       }
+//     })
 
-    // tạo student
-    if (dto.role === users_role.student) {
-      await this.prisma.students.create({
-        data: {
-          user_id: user.id,
-          student_code: dto.student_code ?? `STD${user.id}`,
-          phone: dto.phone ?? null,
-          class_id: dto.class_id ? BigInt(dto.class_id) : null,
-        }
-      })
-    }
+//     // tạo student
+//     if (dto.role === users_role.student) {
+//       await this.prisma.students.create({
+//         data: {
+//           user_id: user.id,
+//           student_code: dto.student_code ?? `STD${user.id}`,
+//           phone: dto.phone ?? null,
+//           class_id: dto.class_id ? BigInt(dto.class_id) : null,
+//         }
+//       })
+//     }
 
-    // tạo lecturer
-    if (dto.role === users_role.lecturer) {
-      await this.prisma.lecturers.create({
-        data: {
-          user_id: user.id,
-          lecturer_code: dto.lecturer_code ?? `LEC${user.id}`,
-          department: dto.department ?? null,
-          phone: dto.phone ?? null,
-        }
-      })
+//     // tạo lecturer
+//     if (dto.role === users_role.lecturer) {
+//       await this.prisma.lecturers.create({
+//         data: {
+//           user_id: user.id,
+//           lecturer_code: dto.lecturer_code ?? `LEC${user.id}`,
+//           department: dto.department ?? null,
+//           phone: dto.phone ?? null,
+//         }
+//       })
 
-    return {
-      message: 'Tạo người dùng thành công',
-      user: {
-        id: user.id.toString(),
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role,
-      },
-    };
-  }
-}
+//     return {
+//       message: 'Tạo người dùng thành công',
+//       user: {
+//         id: user.id.toString(),
+//         full_name: user.full_name,
+//         email: user.email,
+//         role: user.role,
+//       },
+//     };
+//   }
+// }
 
   // ***************************** ĐĂNG NHẬP *****************************
   async login(data: LoginAuthDto) {
