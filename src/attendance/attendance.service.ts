@@ -25,6 +25,60 @@ export class AttendanceService {
   private CAMPUS_RADIUS_M = 600;
   private MAX_ACCURACY_M = 120;
 
+  // ====== SETTINGS / REQUIRED DAYS (VN timezone) ======
+  private TZ = 'Asia/Ho_Chi_Minh';
+
+  private ymdInTz(date: Date, timeZone: string) {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(date);
+
+    const y = parts.find((p) => p.type === 'year')!.value;
+    const m = parts.find((p) => p.type === 'month')!.value;
+    const d = parts.find((p) => p.type === 'day')!.value;
+    return `${y}-${m}-${d}`; // YYYY-MM-DD
+  }
+
+  private weekday1to7InTz(date: Date, timeZone: string) {
+    const wd = new Intl.DateTimeFormat('en-US', { timeZone, weekday: 'short' }).format(date); // Mon/Tue...
+    const map: Record<string, number> = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 };
+    return map[wd] ?? 0;
+  }
+
+  private parseWeekdays(setting?: string | null): number[] {
+    if (!setting) return [];
+    return setting
+      .split(',')
+      .map((x) => parseInt(x.trim(), 10))
+      .filter((n) => n >= 1 && n <= 7);
+  }
+
+  private async getSetting(key: string): Promise<string | null> {
+    const row = await this.prisma.system_settings.findUnique({
+      where: { setting_key: key },
+      select: { setting_value: true },
+    });
+    return row?.setting_value ?? null;
+  }
+
+  private async ensureTodayIsAllowedAttendanceDay() {
+    const onlyRequired = (await this.getSetting('attendance_only_required_days')) === 'true';
+    if (!onlyRequired) return;
+
+    const weekdaysSetting = await this.getSetting('attendance_required_weekdays');
+    const required = this.parseWeekdays(weekdaysSetting);
+    const requiredWeekdays = required.length ? required : [1, 3, 5]; // default T2-T4-T6
+
+    const now = new Date();
+    const weekday = this.weekday1to7InTz(now, this.TZ);
+
+    if (!requiredWeekdays.includes(weekday)) {
+      throw new BadRequestException('Hôm nay không nằm trong lịch điểm danh bắt buộc của tuần');
+    }
+  }
   // ====== helpers DATE (để không lệch ngày ở VN với @db.Date) ======
   private dateOnlyUTCFromLocalNow() {
     const now = new Date();
@@ -212,6 +266,7 @@ export class AttendanceService {
   }
 
   async studentCheckIn(req: any, dto: AttendanceLocationDto) {
+     await this.ensureTodayIsAllowedAttendanceDay();
     const internship = await this.getMyInternship(req.user.userId);
 
     const ip = this.getClientIp(req);
@@ -277,6 +332,7 @@ export class AttendanceService {
   }
 
   async studentCheckOut(req: any, dto: AttendanceLocationDto) {
+        await this.ensureTodayIsAllowedAttendanceDay();
     const internship = await this.getMyInternship(req.user.userId);
 
     const ip = this.getClientIp(req);

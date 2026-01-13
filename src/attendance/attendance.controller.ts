@@ -29,7 +29,6 @@ export class AttendanceController {
   constructor(private readonly service: AttendanceService) {}
 
   // ========================= STUDENT =========================
-
   @Get('student/today')
   @Roles('student')
   studentToday(@Req() req: any) {
