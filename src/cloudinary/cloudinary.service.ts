@@ -26,7 +26,7 @@ export class CloudinaryService {
     if (!file?.buffer) throw new BadRequestException('File không hợp lệ');
 
     const folder = opts?.folder ?? 'worklogs';
-    const publicId = opts?.public_id; // optional
+    const publicId = opts?.public_id; 
 
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
@@ -34,7 +34,6 @@ export class CloudinaryService {
           folder,
           public_id: publicId,
           resource_type: 'auto',
-          // PUBLIC mặc định là public, không signed
           overwrite: true,
         },
         (error: any, result: any) => {

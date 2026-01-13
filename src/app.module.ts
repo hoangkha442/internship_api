@@ -7,9 +7,10 @@ import { UserModule } from './user/user.module';
 import { InternshipsModule } from './internships/internships.module';
 import { WorklogModule } from './worklog/worklog.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { ProgressReportModule } from './progress-report/progress-report.module';
 
 @Module({
-  imports: [ConfigModule.forRoot() ,AuthModule, UserModule,  InternshipsModule, WorklogModule, AttendanceModule],
+  imports: [ConfigModule.forRoot() ,AuthModule, UserModule,  InternshipsModule, WorklogModule, AttendanceModule, ProgressReportModule],
   controllers: [AppController],
   providers: [AppService],
 })

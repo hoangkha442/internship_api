@@ -703,7 +703,6 @@ export class AttendanceService {
   }
 
   async adminCreateNetwork(dto: CreateAllowedNetworkDto) {
-    // validate CIDR basic
     try { ipaddr.parseCIDR(dto.cidr); } catch { throw new BadRequestException('CIDR không hợp lệ'); }
 
     const created = await this.prisma.allowed_networks.create({
