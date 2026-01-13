@@ -9,9 +9,10 @@ import { WorklogModule } from './worklog/worklog.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { ProgressReportModule } from './progress-report/progress-report.module';
 import { LecturerDashboardModule } from './lecturer-dashboard/lecturer-dashboard.module';
+import { StudentDashboardModule } from './student-dashboard/student-dashboard.module';
 
 @Module({
-  imports: [ConfigModule.forRoot() ,AuthModule, UserModule,  InternshipsModule, WorklogModule, AttendanceModule, ProgressReportModule, LecturerDashboardModule],
+  imports: [ConfigModule.forRoot() ,AuthModule, UserModule,  InternshipsModule, WorklogModule, AttendanceModule, ProgressReportModule, LecturerDashboardModule, StudentDashboardModule],
   controllers: [AppController],
   providers: [AppService],
 })
